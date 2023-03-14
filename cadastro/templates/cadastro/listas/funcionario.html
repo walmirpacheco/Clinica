@@ -1,0 +1,111 @@
+{% extends 'paginas/modelo.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+    {% block conteudo %}        
+    <div style="text-align: center;">
+        <h3>{{ titulo }}</h3>
+    </div>
+
+    <hr>
+    <form action="?" method="GET">
+        <input type="text" name="nome" id="" value="{{ request.GET.nome }}" class="p-1 border" autocomplete="off" placeholder="Digite o nome do funcionário">  
+        
+        <button type="submit" class="btn btn-success">Buscar</button>
+
+        <a href="{% url 'listar-funcionarios' %}" class="btn btn-light">Limpar</a>
+    </form>
+
+    <hr>
+
+    <a href="{% url 'cadastro-funcionario' %}" class="btn btn-primary btn-sm">Adicionar Funcionário</a>
+
+    <hr>    
+        <div class="table-responsive">        
+            <table class="table table-striped">
+                <tr>                        
+                    <th>Nome</th>
+                    <th>Cargo</th>
+                    <th>CPF</th>
+                    <th>RG</th>
+                    <th>Estado Civil</th>
+                    <th>Data de Nascimento</th>
+                    <th>Sexo</th>
+                    <th>Endereço</th>
+                    <th>Número</th>
+                    <th>Complemento</th>
+                    <th>Bairro</th>
+                    <th>CEP</th>
+                    <th>UF</th>
+                    <th>Cidade</th>
+                    <th>Telefone Residencial</th>
+                    <th>Celular</th>                    
+                    <th>Observações</th>
+                    <th>Edições</th>
+                </tr>                
+
+                {% for funcionario in object_list %} 
+
+                <tr>                        
+                    <td>{{ funcionario.nome }}&nbsp; &nbsp;</td>
+                    <td>{{ funcionario.cargo }}&nbsp;&nbsp;</td>
+                    <td>{{ funcionario.cpf }}&nbsp;&nbsp;</td>
+                    <td>{{ funcionario.rg }}&nbsp;&nbsp;</td>
+                    <td>{{ funcionario.get_estado_civil_display }}&nbsp;&nbsp;</td>
+                    <td>{{ funcionario.nascimento }}&nbsp;&nbsp;</td>
+                    <td>{{ funcionario.get_sexo_display }}&nbsp;</td>
+                    <td>{{ funcionario.endereco }}&nbsp;&nbsp;</td>
+                    <td>{{ funcionario.numero }}&nbsp;&nbsp;</td>
+                    <td>{{ funcionario.complemento }}&nbsp;&nbsp;</td>
+                    <td>{{ funcionario.bairro }}&nbsp;&nbsp;</td>
+                    <td>{{ funcionario.cep }}&nbsp;&nbsp;</td>
+                    <td>{{ funcionario.get_uf_display }}&nbsp;&nbsp;</td>
+                    <td>{{ funcionario.cidade }}&nbsp;&nbsp;</td>
+                    <td>{{ funcionario.telefone_res }}&nbsp;&nbsp;</td>
+                    <td>{{ funcionario.celular }}&nbsp;&nbsp;</td>                      
+                    <td>&nbsp;{{ funcionario.observacoes }}&nbsp; &nbsp;</td>                            
+                    <td>
+                        <a href="{% url 'editar-funcionario' funcionario.pk %}" class="btn btn-warning btn-sm" title="Editar">
+                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                        </a>                                             
+                        <a href="{% url 'excluir-funcionario' funcionario.pk %}" class="btn btn-danger btn-sm" title="Excluir">
+                            <i class="fa fa-trash" aria-hidden="true"></i>                           
+                        </a>                        
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="18">Nenhum funcionario cadastrado.</td>
+                </tr>
+                {% endfor %}                
+            </table>
+
+            <ul class="pagination justify-content-center">
+                
+                {% if page_obj.has_previous %}
+                    {% if request.GET.nome %}
+                    <li class="page-item"><a class="page-link" href="?page=1&nome={{ request.GET.nome }}">&laquo; Primeira</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}&nome={{ request.GET.nome }}">Anterior</a></li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link" href="?page=1">&laquo; Primeira</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a></li>
+                    {% endif %}
+                {% endif %}
+
+                <li class="page-iterm">
+                    <span class="page-link">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.</span>
+                </li>
+
+                {% if page_obj.has_next %}
+                    {% if request.GET.nome %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}&nome={{ request.GET.nome }}">Próxima</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&nome={{ request.GET.nome }}">Última &raquo;</a></li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Próxima</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Última &raquo;</a></li>
+                    {% endif %}
+                {% endif %}
+            </ul>
+            <hr>
+        </div>
+    {% endblock %}

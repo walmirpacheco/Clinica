@@ -1,0 +1,52 @@
+{% extends 'paginas/modelo.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+    {% block conteudo %}
+    <div style="text-align:center">
+        <h3>{{ titulo }}</h3>
+    <p class="lead">
+        Preencha todos os campos obrigatórios.
+    </p>        
+    </div>
+    <hr>
+        <div class="container">
+            <form method="post" action="." autocomplete="off">
+    
+                {% csrf_token %}            
+                {{ form|crispy }}
+    
+                <button type="submit" class= "btn btn-primary">{{ botao }}</button>
+            </form>
+        </div>        
+    {% endblock %}
+
+    {% block scripts %}
+    <script src="{% static 'js/jquery.mask1.min.js' %}"></script>
+
+    <script>
+        var SPMaskBehavior = function (val) {
+  return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+},
+spOptions = {
+  onKeyPress: function(val, e, field, options) {
+      field.mask(SPMaskBehavior.apply({}, arguments), options);
+    }
+};
+    </script>
+        
+    <script>
+        $(document).ready(function(){
+            $("#id_cpf").mask("000.000.000-00", {placeholder:"000.000.000-00"});            
+            $("#id_celular").mask(SPMaskBehavior, spOptions);
+            $("#id_telefone_res").mask(SPMaskBehavior, spOptions);
+            $("#id_nascimento").mask("00/00/0000", {placeholder:"__/__/____"});
+            $("#id_numero").mask("0000000000", {placeholder:"0000000000"});
+            $("#id_cep").mask("00000-000", {placeholder:"00000-000"});
+            $("#id_sus").mask("000000000000000", {placeholder:"000000000000000"});
+            $("#id_rg").mask("00000000", {placeholder:"00000000"});
+        });
+    </script>
+    {% endblock %}
+        
+        

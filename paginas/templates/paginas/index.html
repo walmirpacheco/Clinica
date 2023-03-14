@@ -1,0 +1,15 @@
+{% extends 'paginas/modelo.html' %}
+
+
+{% block conteudo %}
+    <div style="text-align: center;">
+        <h3>Página inicial</h3>        
+        
+            {% if user.perfil.nome_completo %}
+            Bem vindo ao sistema {{ user.perfil.nome_completo }}.
+            {% else %}
+            Você precisa completar seu cadastro. Acesse os <a href="{% url 'atualizar-dados' %}">meus dados</a> para atualizar ou acessar o conteúdo.
+            {% endif %}
+        
+    </div>    
+{% endblock %}
