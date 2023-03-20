@@ -1,9 +1,13 @@
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.models import User, Group
 from usuarios.forms import UsuarioForm
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
 from usuarios.models import Perfil
+
 
 class UsuarioCreate(CreateView):
     template_name = "cadastro/form.html"
@@ -50,3 +54,19 @@ class PerfilUpdate(UpdateView):
         context['botao'] = "Atualizar"
 
         return context
+
+def alterarSenha(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(data=request.POST, user=request.user)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            return render(request, 'paginas/index.html')
+        else:
+            return redirect('index')
+    else:
+        form = PasswordChangeForm(user=request.user)
+        context = {
+            'form': form,
+        }
+        return render(request, 'usuarios/alterarSenha.html', context)
